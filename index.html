@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema Escolar - Moreira</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        section {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Sistema Escolar - Professor Moreira</h1>
+</header>
+
+<section>
+    <h2>Cadastrar Aluno</h2>
+    <input type="text" id="nome" placeholder="Nome do aluno">
+    <input type="number" id="nota" placeholder="Nota">
+    <button onclick="adicionarAluno()">Adicionar</button>
+
+    <table id="tabelaAlunos">
+        <tr>
+            <th>Nome</th>
+            <th>Nota</th>
+        </tr>
+    </table>
+</section>
+
+<script>
+    function adicionarAluno() {
+        let nome = document.getElementById("nome").value;
+        let nota = document.getElementById("nota").value;
+
+        if (nome === "" || nota === "") {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        let tabela = document.getElementById("tabelaAlunos");
+        let novaLinha = tabela.insertRow();
+
+        let colunaNome = novaLinha.insertCell(0);
+        let colunaNota = novaLinha.insertCell(1);
+
+        colunaNome.innerHTML = nome;
+        colunaNota.innerHTML = nota;
+
+        document.getElementById("nome").value = "";
+        document.getElementById("nota").value = "";
+    }
+</script>
+
+</body>
+</html>
