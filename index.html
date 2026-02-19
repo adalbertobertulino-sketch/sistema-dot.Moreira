@@ -1,30 +1,60 @@
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "sistema-dot.firebaseapp.com",
-  projectId: "sistema-dot",
-  storageBucket: "sistema-dot.firebasestorage.app",
-  messagingSenderId: "1003611331429",
-  appId: "1:1003611331429:web:bf8478cef6fecfa6059f8c"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
+    authDomain: "sistema-dot.firebaseapp.com",
+    projectId: "sistema-dot",
+    storageBucket: "sistema-dot.firebasestorage.app",
+    messagingSenderId: "1003611331429",
+    appId: "1:1003611331429:web:e966521b694500de059f8c",
+    measurementId: "G-9QKVTPZLLX"
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-window.login = function(email, senha){
-  signInWithEmailAndPassword(auth, email, senha)
-    .then(() => alert("Login realizado com sucesso!"))
-    .catch(error => alert(error.message));
-}
+  // CADASTRAR
+  window.cadastrar = function() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
 
-window.cadastrar = function(email, senha){
-  createUserWithEmailAndPassword(auth, email, senha)
-    .then(() => alert("Usuário criado!"))
-    .catch(error => alert(error.message));
-}
+    createUserWithEmailAndPassword(auth, email, senha)
+      .then(() => alert("Usuário cadastrado com sucesso!"))
+      .catch(error => alert(error.message));
+  }
+
+  // LOGIN
+  window.login = function() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    signInWithEmailAndPassword(auth, email, senha)
+      .then(() => alert("Login realizado com sucesso!"))
+      .catch(error => alert(error.message));
+  }
+
+  // LOGOUT
+  window.logout = function() {
+    signOut(auth)
+      .then(() => alert("Saiu do sistema"));
+  }
+
+  // VERIFICAR SE ESTÁ LOGADO
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("Usuário logado:", user.email);
+    } else {
+      console.log("Nenhum usuário logado");
+    }
+  });
+
 </script>
+
