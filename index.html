@@ -2,75 +2,27 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Sistema Escolar Completo</title>
+<title>Sistema Escolar - Moreira e Silva</title>
 
 <style>
-body {
-    font-family: Arial;
-    background: #f0f2f5;
-    margin: 0;
-}
-
-header {
-    background: #1e3a8a;
-    color: white;
-    padding: 15px;
-    text-align: center;
-}
-
-.container {
-    padding: 20px;
-}
-
-input, button {
-    padding: 8px;
-    margin: 5px;
-}
-
-button {
-    background: #2563eb;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #1d4ed8;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    margin-top: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-table, th, td {
-    border: 1px solid #ccc;
-}
-
-th, td {
-    padding: 8px;
-    text-align: center;
-}
-
-.hidden {
-    display: none;
-}
+body { font-family: Arial; background:#f4f6f9; margin:0; }
+header { background:#1e3a8a; color:white; padding:15px; text-align:center; }
+.container { padding:20px; }
+input, select, button { padding:8px; margin:5px; }
+button { background:#2563eb; color:white; border:none; cursor:pointer; }
+button:hover { background:#1d4ed8; }
+.card { background:white; padding:20px; margin-top:15px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+table { width:100%; border-collapse:collapse; margin-top:10px; }
+table, th, td { border:1px solid #ccc; }
+th, td { padding:8px; text-align:center; }
+.hidden { display:none; }
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Sistema Escolar - Professor Moreira</h1>
+<h1>Sistema Escolar - Escola Moreira e Silva</h1>
 </header>
 
 <div class="container">
@@ -84,21 +36,30 @@ th, td {
 <p id="erroLogin" style="color:red;"></p>
 </div>
 
-<!-- PAINEL -->
-<div id="painel" class="hidden">
+<!-- SISTEMA -->
+<div id="sistema" class="hidden">
+
+<div class="card">
+<h2>Cadastrar Turma</h2>
+<input type="text" id="novaTurma" placeholder="Nome da turma">
+<button onclick="criarTurma()">Criar Turma</button>
+</div>
 
 <div class="card">
 <h2>Cadastrar Aluno</h2>
-<input type="text" id="nome" placeholder="Nome">
+<select id="turmaSelect"></select>
+<input type="text" id="nome" placeholder="Nome do aluno">
 <input type="number" id="nota1" placeholder="Nota 1">
 <input type="number" id="nota2" placeholder="Nota 2">
 <button onclick="adicionarAluno()">Adicionar</button>
 </div>
 
 <div class="card">
-<h2>Lista de Alunos</h2>
+<h2>Painel da Direção</h2>
+<select id="filtroTurma" onchange="renderTabela()"></select>
 <table id="tabela">
 <tr>
+<th>Turma</th>
 <th>Nome</th>
 <th>Média</th>
 <th>Situação</th>
@@ -112,60 +73,108 @@ th, td {
 
 <script>
 
-// LOGIN SIMPLES
+let dados = JSON.parse(localStorage.getItem("dados")) || { turmas: [], alunos: [] };
+
+function salvar() {
+    localStorage.setItem("dados", JSON.stringify(dados));
+}
+
 function entrar() {
     let usuario = document.getElementById("usuario").value;
     let senha = document.getElementById("senha").value;
 
     if (usuario === "admin" && senha === "1234") {
         document.getElementById("login").classList.add("hidden");
-        document.getElementById("painel").classList.remove("hidden");
+        document.getElementById("sistema").classList.remove("hidden");
+        atualizarSelects();
+        renderTabela();
     } else {
-        document.getElementById("erroLogin").innerText = "Usuário ou senha incorretos!";
+        document.getElementById("erroLogin").innerText = "Login incorreto!";
     }
 }
 
-// CADASTRO
+function criarTurma() {
+    let nome = document.getElementById("novaTurma").value;
+    if (!nome) return alert("Digite o nome da turma");
+
+    dados.turmas.push(nome);
+    salvar();
+    atualizarSelects();
+    document.getElementById("novaTurma").value = "";
+}
+
+function atualizarSelects() {
+    let selects = ["turmaSelect", "filtroTurma"];
+    selects.forEach(id => {
+        let select = document.getElementById(id);
+        select.innerHTML = "";
+        dados.turmas.forEach(t => {
+            let option = document.createElement("option");
+            option.value = t;
+            option.textContent = t;
+            select.appendChild(option);
+        });
+    });
+}
+
 function adicionarAluno() {
+    let turma = document.getElementById("turmaSelect").value;
     let nome = document.getElementById("nome").value;
     let nota1 = parseFloat(document.getElementById("nota1").value);
     let nota2 = parseFloat(document.getElementById("nota2").value);
 
-    if (!nome || isNaN(nota1) || isNaN(nota2)) {
-        alert("Preencha todos os campos!");
-        return;
-    }
+    if (!turma || !nome || isNaN(nota1) || isNaN(nota2))
+        return alert("Preencha todos os campos");
 
     let media = (nota1 + nota2) / 2;
-    let situacao = "";
+    let situacao = media >= 7 ? "Aprovado" :
+                   media >= 5 ? "Recuperação" :
+                   "Reprovado";
 
-    if (media >= 7) {
-        situacao = "Aprovado";
-    } else if (media >= 5) {
-        situacao = "Recuperação";
-    } else {
-        situacao = "Reprovado";
-    }
-
-    let tabela = document.getElementById("tabela");
-    let linha = tabela.insertRow();
-
-    linha.insertCell(0).innerHTML = nome;
-    linha.insertCell(1).innerHTML = media.toFixed(1);
-    linha.insertCell(2).innerHTML = situacao;
-    linha.insertCell(3).innerHTML = "<button onclick='removerAluno(this)'>Excluir</button>";
+    dados.alunos.push({ turma, nome, media: media.toFixed(1), situacao });
+    salvar();
+    renderTabela();
 
     document.getElementById("nome").value = "";
     document.getElementById("nota1").value = "";
     document.getElementById("nota2").value = "";
 }
 
-function removerAluno(botao) {
-    let linha = botao.parentNode.parentNode;
-    linha.remove();
+function renderTabela() {
+    let tabela = document.getElementById("tabela");
+    tabela.innerHTML = `
+    <tr>
+        <th>Turma</th>
+        <th>Nome</th>
+        <th>Média</th>
+        <th>Situação</th>
+        <th>Ação</th>
+    </tr>`;
+
+    let filtro = document.getElementById("filtroTurma").value;
+
+    dados.alunos
+        .filter(a => !filtro || a.turma === filtro)
+        .forEach((a, index) => {
+            let row = tabela.insertRow();
+            row.insertCell(0).innerText = a.turma;
+            row.insertCell(1).innerText = a.nome;
+            row.insertCell(2).innerText = a.media;
+            row.insertCell(3).innerText = a.situacao;
+            row.insertCell(4).innerHTML =
+                `<button onclick="removerAluno(${index})">Excluir</button>`;
+        });
+}
+
+function removerAluno(index) {
+    dados.alunos.splice(index, 1);
+    salvar();
+    renderTabela();
 }
 
 </script>
 
 </body>
 </html>
+
+
