@@ -1,109 +1,170 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Sistema Escolar - Moreira</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-        }
+<meta charset="UTF-8">
+<title>Sistema Escolar Completo</title>
 
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
+<style>
+body {
+    font-family: Arial;
+    background: #f0f2f5;
+    margin: 0;
+}
 
-        section {
-            background: white;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+header {
+    background: #1e3a8a;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
 
-        input, button {
-            padding: 8px;
-            margin: 5px 0;
-        }
+.container {
+    padding: 20px;
+}
 
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+input, button {
+    padding: 8px;
+    margin: 5px;
+}
 
-        button:hover {
-            background-color: #2980b9;
-        }
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
 
-        table {
-            width: 100%;
-            margin-top: 15px;
-            border-collapse: collapse;
-        }
+button:hover {
+    background: #1d4ed8;
+}
 
-        table, th, td {
-            border: 1px solid #ccc;
-        }
+.card {
+    background: white;
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
 
-        th {
-            background-color: #ecf0f1;
-        }
-    </style>
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+</style>
 </head>
+
 <body>
 
 <header>
-    <h1>Sistema Escolar - Professor Moreira</h1>
+<h1>Sistema Escolar - Professor Moreira</h1>
 </header>
 
-<section>
-    <h2>Cadastrar Aluno</h2>
-    <input type="text" id="nome" placeholder="Nome do aluno">
-    <input type="number" id="nota" placeholder="Nota">
-    <button onclick="adicionarAluno()">Adicionar</button>
+<div class="container">
 
-    <table id="tabelaAlunos">
-        <tr>
-            <th>Nome</th>
-            <th>Nota</th>
-        </tr>
-    </table>
-</section>
+<!-- LOGIN -->
+<div id="login" class="card">
+<h2>Login</h2>
+<input type="text" id="usuario" placeholder="Usuário">
+<input type="password" id="senha" placeholder="Senha">
+<button onclick="entrar()">Entrar</button>
+<p id="erroLogin" style="color:red;"></p>
+</div>
+
+<!-- PAINEL -->
+<div id="painel" class="hidden">
+
+<div class="card">
+<h2>Cadastrar Aluno</h2>
+<input type="text" id="nome" placeholder="Nome">
+<input type="number" id="nota1" placeholder="Nota 1">
+<input type="number" id="nota2" placeholder="Nota 2">
+<button onclick="adicionarAluno()">Adicionar</button>
+</div>
+
+<div class="card">
+<h2>Lista de Alunos</h2>
+<table id="tabela">
+<tr>
+<th>Nome</th>
+<th>Média</th>
+<th>Situação</th>
+<th>Ação</th>
+</tr>
+</table>
+</div>
+
+</div>
+</div>
 
 <script>
-    function adicionarAluno() {
-        let nome = document.getElementById("nome").value;
-        let nota = document.getElementById("nota").value;
 
-        if (nome === "" || nota === "") {
-            alert("Preencha todos os campos!");
-            return;
-        }
+// LOGIN SIMPLES
+function entrar() {
+    let usuario = document.getElementById("usuario").value;
+    let senha = document.getElementById("senha").value;
 
-        let tabela = document.getElementById("tabelaAlunos");
-        let novaLinha = tabela.insertRow();
-
-        let colunaNome = novaLinha.insertCell(0);
-        let colunaNota = novaLinha.insertCell(1);
-
-        colunaNome.innerHTML = nome;
-        colunaNota.innerHTML = nota;
-
-        document.getElementById("nome").value = "";
-        document.getElementById("nota").value = "";
+    if (usuario === "admin" && senha === "1234") {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("painel").classList.remove("hidden");
+    } else {
+        document.getElementById("erroLogin").innerText = "Usuário ou senha incorretos!";
     }
+}
+
+// CADASTRO
+function adicionarAluno() {
+    let nome = document.getElementById("nome").value;
+    let nota1 = parseFloat(document.getElementById("nota1").value);
+    let nota2 = parseFloat(document.getElementById("nota2").value);
+
+    if (!nome || isNaN(nota1) || isNaN(nota2)) {
+        alert("Preencha todos os campos!");
+        return;
+    }
+
+    let media = (nota1 + nota2) / 2;
+    let situacao = "";
+
+    if (media >= 7) {
+        situacao = "Aprovado";
+    } else if (media >= 5) {
+        situacao = "Recuperação";
+    } else {
+        situacao = "Reprovado";
+    }
+
+    let tabela = document.getElementById("tabela");
+    let linha = tabela.insertRow();
+
+    linha.insertCell(0).innerHTML = nome;
+    linha.insertCell(1).innerHTML = media.toFixed(1);
+    linha.insertCell(2).innerHTML = situacao;
+    linha.insertCell(3).innerHTML = "<button onclick='removerAluno(this)'>Excluir</button>";
+
+    document.getElementById("nome").value = "";
+    document.getElementById("nota1").value = "";
+    document.getElementById("nota2").value = "";
+}
+
+function removerAluno(botao) {
+    let linha = botao.parentNode.parentNode;
+    linha.remove();
+}
+
 </script>
 
 </body>
