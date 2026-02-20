@@ -1,9 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Teste Sistema</title>
+  <meta charset="UTF-8">
+  <title>Sistema Dot</title>
 </head>
 <body>
-  <h1>Sistema funcionando 🚀</h1>
+
+<h1>Sistema Dot 🚀</h1>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
+  authDomain: "sistema-dot.firebaseapp.com",
+  projectId: "sistema-dot",
+  storageBucket: "sistema-dot.firebasestorage.app",
+  messagingSenderId: "1003611331429",
+  appId: "1:1003611331429:web:e966521b694500de059f8c"
+};
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+console.log("Firebase conectado com sucesso 🚀");
+
+</script>
+
 </body>
 </html>
