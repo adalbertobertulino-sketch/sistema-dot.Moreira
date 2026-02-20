@@ -8,10 +8,11 @@
 
 <h1>Sistema Dot 🚀</h1>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!-- Firebase compatível -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
     authDomain: "sistema-dot.firebaseapp.com",
@@ -21,10 +22,10 @@
     appId: "1:1003611331429:web:e966521b694500de059f8c"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  firebase.initializeApp(firebaseConfig);
 
   console.log("Firebase conectado com sucesso 🚀");
+  alert("Firebase conectado com sucesso 🚀");
 </script>
 
 </body>
