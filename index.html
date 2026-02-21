@@ -2,56 +2,21 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Sistema Dot</title>
+  <title>Sistema DOT Moreira</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <h1>Sistema Dot 🚀</h1>
+  <div class="login-container">
+    <h1>Sistema DOT Moreira</h1>
 
-  <button onclick="login()">Entrar com Google</button>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="senha" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
 
-  <p id="user"></p>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-    import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      signInWithPopup,
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
-      authDomain: "sistema-dot.firebaseapp.com",
-      projectId: "sistema-dot",
-      storageBucket: "sistema-dot.firebasestorage.app",
-      messagingSenderId: "1003611331429",
-      appId: "1:1003611331429:web:bf8478cef6fecfa6059f8c",
-      measurementId: "G-31T6CTB6GY"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    window.login = async function () {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        console.log("Logado:", result.user.displayName);
-      } catch (error) {
-        console.error("Erro no login:", error);
-      }
-    };
-
-    onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.location.href = "dashboard.html";
-  }
-});
-
-  </script>
-
+  <script type="module" src="js/auth.js"></script>
 </body>
 </html>
-
