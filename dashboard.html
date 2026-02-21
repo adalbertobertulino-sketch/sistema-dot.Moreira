@@ -67,7 +67,9 @@ onAuthStateChanged(auth, (user) => {
 onSnapshot(collection(db, "alunos"), (snapshot) => {
   document.getElementById("totalAlunos").innerText =
     snapshot.size;
-});
+});if (userData.tipo === "admin") {
+   mostrarAdmin();
+}
 </script>
 
 </body>
