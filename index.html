@@ -8,24 +8,45 @@
 
 <h1>Sistema Dot 🚀</h1>
 
-<!-- Firebase compatível -->
+<button onclick="login()">Entrar com Google</button>
+<button onclick="logout()">Sair</button>
+
+<p id="user"></p>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 <script>
   const firebaseConfig = {
-    apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
-    authDomain: "sistema-dot.firebaseapp.com",
-    projectId: "sistema-dot",
-    storageBucket: "sistema-dot.appspot.com",
-    messagingSenderId: "1003611331429",
-    appId: "1:1003611331429:web:e966521b694500de059f8c"
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_AUTH_DOMAIN",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_BUCKET",
+    messagingSenderId: "SEU_ID",
+    appId: "SEU_APP_ID"
   };
 
   firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-  console.log("Firebase conectado com sucesso 🚀");
-  alert("Firebase conectado com sucesso 🚀");
+  function login() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  }
+
+  function logout() {
+    auth.signOut();
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById("user").innerText =
+        "Logado como: " + user.displayName;
+    } else {
+      document.getElementById("user").innerText =
+        "Nenhum usuário logado";
+    }
+  });
 </script>
 
 </body>
