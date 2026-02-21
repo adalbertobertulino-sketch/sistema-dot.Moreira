@@ -45,16 +45,13 @@
     };
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById("user").innerText =
-          "Logado como: " + user.displayName;
-      } else {
-        document.getElementById("user").innerText =
-          "Nenhum usuário logado";
-      }
-    });
+  if (user) {
+    window.location.href = "dashboard.html";
+  }
+});
 
   </script>
 
 </body>
 </html>
+
