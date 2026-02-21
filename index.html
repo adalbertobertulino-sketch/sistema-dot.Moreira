@@ -6,47 +6,57 @@
 </head>
 <body>
 
-<h1>Sistema Dot 🚀</h1>
+<h2>Sistema Dot - Escola Estadual Moreira e Silva</h2>
 
 <button onclick="login()">Entrar com Google</button>
 <button onclick="logout()">Sair</button>
 
-<p id="user"></p>
+<p id="usuario"></p>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script type="module">
 
-<script>
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "SEU_AUTH_DOMAIN",
-    projectId: "SEU_PROJECT_ID",
-    storageBucket: "SEU_BUCKET",
-    messagingSenderId: "SEU_ID",
-    appId: "SEU_APP_ID"
-  };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY_AQUI",
+  authDomain: "sistema-dot.firebaseapp.com",
+  projectId: "sistema-dot",
+  storageBucket: "sistema-dot.firebasestorage.app",
+  messagingSenderId: "1003611331429",
+  appId: "1:1003611331429:web:e966521b694500de059f8c"
+};
 
-  function login() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+window.login = function() {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log("Login realizado!");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+window.logout = function() {
+  signOut(auth);
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("usuario").innerText =
+      "Conectado como: " + user.email;
+    console.log("Firebase conectado com sucesso!");
+  } else {
+    document.getElementById("usuario").innerText =
+      "Nenhum usuário conectado";
   }
+});
 
-  function logout() {
-    auth.signOut();
-  }
-
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      document.getElementById("user").innerText =
-        "Logado como: " + user.displayName;
-    } else {
-      document.getElementById("user").innerText =
-        "Nenhum usuário logado";
-    }
-  });
 </script>
 
 </body>
