@@ -14,50 +14,31 @@
 <p id="usuario"></p>
 
 <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } 
+    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
+    authDomain: "sistema-dot.firebaseapp.com",
+    projectId: "sistema-dot",
+    storageBucket: "sistema-dot.firebasestorage.app",
+    messagingSenderId: "1003611331429",
+    appId: "1:1003611331429:web:bf8478cef6fecfa6059f8c",
+    measurementId: "G-31T6CTB6GY"
+  };
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY_AQUI",
-  authDomain: "sistema-dot.firebaseapp.com",
-  projectId: "sistema-dot",
-  storageBucket: "sistema-dot.firebasestorage.app",
-  messagingSenderId: "1003611331429",
-  appId: "1:1003611331429:web:e966521b694500de059f8c"
-};
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+  const provider = new GoogleAuthProvider();
 
-window.login = function() {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log("Login realizado!");
-    })
-    .catch((error) => {
+  window.login = async function() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      alert("Logado como: " + result.user.displayName);
+    } catch (error) {
       console.error(error);
-    });
-}
-
-window.logout = function() {
-  signOut(auth);
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    document.getElementById("usuario").innerText =
-      "Conectado como: " + user.email;
-    console.log("Firebase conectado com sucesso!");
-  } else {
-    document.getElementById("usuario").innerText =
-      "Nenhum usuário conectado";
-  }
-});
-
+    }
+  };
 </script>
-
-</body>
-</html>
