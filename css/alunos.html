@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Alunos - Sistema DOT Moreira</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+<div class="sidebar">
+  <h2>🎓 Sistema DOT Moreira</h2>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="alunos.html">Alunos</a>
+</div>
+
+<div class="main">
+  <h1>Cadastro de Alunos</h1>
+
+  <input type="text" id="nome" placeholder="Nome do aluno">
+  <button onclick="salvar()">Cadastrar</button>
+
+  <ul id="lista"></ul>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot }
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
+  authDomain: "sistema-dot.firebaseapp.com",
+  projectId: "sistema-dot",
+  storageBucket: "sistema-dot.firebasestorage.app",
+  messagingSenderId: "1003611331429",
+  appId: "1:1003611331429:web:bf8478cef6fecfa6059f8c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.salvar = async function() {
+  const nome = document.getElementById("nome").value;
+
+  await addDoc(collection(db, "alunos"), {
+    nome: nome,
+    criadoEm: new Date()
+  });
+
+  document.getElementById("nome").value = "";
+};
+
+onSnapshot(collection(db, "alunos"), (snapshot) => {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+  snapshot.forEach(doc => {
+    const li = document.createElement("li");
+    li.textContent = doc.data().nome;
+    lista.appendChild(li);
+  });
+});
+</script>
+
+</body>
+</html>
