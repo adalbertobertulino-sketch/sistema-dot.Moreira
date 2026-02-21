@@ -24,7 +24,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  const adminEmail = "SEU_EMAIL_AQUI@gmail.com";
+  const adminEmail = "adalberto.cafe1982@gmail.com";
 
   onAuthStateChanged(auth, (user) => {
     if (!user || user.email !== adminEmail) {
