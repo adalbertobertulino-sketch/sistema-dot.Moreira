@@ -2,75 +2,20 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Sistema DOT Moreira - Dashboard</title>
+  <title>Dashboard - Sistema DOT Moreira</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="sidebar">
-  <h2>🎓 Sistema DOT Moreira</h2>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="alunos.html">Alunos</a>
-  <a href="admin.html">Admin</a>
-</div>
+  <header>
+    <h1>Painel Administrativo</h1>
+    <button id="logout">Sair</button>
+  </header>
 
-<div class="main">
-  <h1>Dashboard</h1>
+  <main>
+    <h2>Bem-vindo ao Sistema DOT Moreira</h2>
+  </main>
 
-  <div class="card">
-    <h3>Total de Alunos</h3>
-    <p id="totalAlunos">Carregando...</p>
-  </div>
-
-  <div class="card">
-    <h3>Usuário Logado</h3>
-    <p id="userInfo"></p>
-  </div>
-
-  <button onclick="logout()">Sair</button>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut }
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-import { getFirestore, collection, onSnapshot }
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
-  authDomain: "sistema-dot.firebaseapp.com",
-  projectId: "sistema-dot",
-  storageBucket: "sistema-dot.firebasestorage.app",
-  messagingSenderId: "1003611331429",
-  appId: "1:1003611331429:web:bf8478cef6fecfa6059f8c"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-window.logout = async function() {
-  await signOut(auth);
-  window.location.href = "index.html";
-};
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "index.html";
-  } else {
-    document.getElementById("userInfo").innerText =
-      user.displayName + " (" + user.email + ")";
-  }
-});
-
-onSnapshot(collection(db, "alunos"), (snapshot) => {
-  document.getElementById("totalAlunos").innerText =
-    snapshot.size;
-});if (userData.tipo === "admin") {
-   mostrarAdmin();
-}
-</script>
-
+  <script type="module" src="js/auth.js"></script>
 </body>
 </html>
