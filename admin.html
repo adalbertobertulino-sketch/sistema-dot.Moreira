@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin</title>
+</head>
+<body>
 
+<h1>Painel Administrativo 🔒</h1>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } 
+    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMr2MIbnPw7k3W6WVmWwY-Pa3VgG0z1qk",
+    authDomain: "sistema-dot.firebaseapp.com",
+    projectId: "sistema-dot",
+    storageBucket: "sistema-dot.firebasestorage.app",
+    messagingSenderId: "1003611331429",
+    appId: "1:1003611331429:web:bf8478cef6fecfa6059f8c"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const adminEmail = "SEU_EMAIL_AQUI@gmail.com";
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user || user.email !== adminEmail) {
+      window.location.href = "dashboard.html";
+    }
+  });
+</script>
+
+</body>
+</html>
